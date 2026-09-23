@@ -106,9 +106,14 @@ class SGA:
                 f.write(f"{p.cedula},{p.nombre_completo},{p.correo},{p.especialidad},{p.materia}\n")
 
     def registrar_alumno(self, estudiante: Estudiante):
+        if any(e.cedula.lower() == estudiante.cedula.lower() for e in self.lista_estudiantes):
+            print(f"Error: La cédula {estudiante.cedula} ya se encuentra registrada.")
+            return
+        
         self.lista_estudiantes.append(estudiante)
         self.guardar_estudiantes_txt()
         print(f"Estudiante {estudiante.nombre_completo} registrado con éxito.")
+
 
     def registrar_profesor(self, profesor: Profesor):
         self.lista_profesores.append(profesor)
