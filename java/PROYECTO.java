@@ -180,23 +180,20 @@ class SGA {
         }
     }
 
-    public void guardarEstudiantesTxt() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("alumnos.txt"))) {
-            for (Alumno a : listaAlumnos) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(a.getCedula()).append(",")
-                  .append(a.getNombreCompleto()).append(",")
-                  .append(a.getCorreo()).append(",")
-                  .append(a.getPrograma().getNombrePrograma());
-
-                for (double nota : a.getNotas()) {
-                    sb.append(",").append(nota);
-                }
-                bw.write(sb.toString());
-                bw.newLine();
+        public void guardarAlumno(Alumno alumno) {
+        boolean yaExiste = listaAlumnos.stream()
+            .anyMatch(a -> a.getCedula().equalsIgnoreCase(alumno.getCedula()));
+            
+        switch (String.valueOf(yaExiste)) {
+            case "true" -> {
+                System.out.println("Error: La cédula " + alumno.getCedula() + " ya se encuentra registrada.");
+                return;
             }
-        } catch (IOException e) {
-            System.out.println("Error al guardar alumnos: " + e.getMessage());
+            case "false" -> {
+                listaAlumnos.add(alumno);
+                guardarEstudiantesTxt(); 
+                System.out.println("Alumno " + alumno.getNombreCompleto() + " registrado con éxito.");
+            }
         }
     }
 
